@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     name: build
-    runs-on: ubuntu-22.04  # ✅ 升级环境：使用稳定的 22.04，解决兼容性问题
+    runs-on: ubuntu-22.04  # ✅ 环境稳定
     if: ${{ !(github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) }}
     env:
       build_variant: ${{ matrix.build_variant }}
@@ -23,15 +23,14 @@ jobs:
       matrix:
         include:
           - build_variant: "mt7621"
-            targets: "CR660x"  # ✅ 专注单一：只编译您的 CR660x，节省时间
-            # 如果还需要其他型号，可以在引号里加，比如 "CR660x JCG-Q20"
+            targets: "CR660x"  # ✅ 只编译 CR660x
     steps:
-      - uses: actions/checkout@v4  # ✅ 升级插件：v4
+      - uses: actions/checkout@v4  # ✅ v4
       
       - name: Prepare environment
         run: |
           sudo apt update
-          # ✅ 补全依赖：加上 libltdl-dev 防止 ipset 编译报错
+          # ✅ 补全依赖
           sudo apt install libtool-bin gperf python3-docutils autopoint gettext libltdl-dev
       
       - name: Run shellcheck
@@ -47,25 +46,49 @@ jobs:
           cd trunk
           mkdir -p ${images_dir}
           
-          # ⬇️⬇️⬇️ 乐奈的减肥大作战 (针对 MeIsReallyBa 版本) ⬇️⬇️⬇️
-          # 这个库默认开了太多插件，我们在这里用 sed 命令强制关掉它们！
+          # =======================================================
+          # ⬇️⬇️⬇️ 乐奈的【终极】减肥大作战 (V3.0) ⬇️⬇️⬇️
+          # =======================================================
           
-          config_file="configs/templates/CR660x.config"
+          # 1. 智能查找配置文件 (防止路径错误)
+          config_file=$(find configs -name "CR660x.config" | head -n 1)
+          
           if [ -f "$config_file" ]; then
-             echo "正在执行瘦身计划..."
-             # 关掉科学上网全家桶 (减体积大户)
+             echo "✅ 锁定目标: $config_file"
+             echo "🔥 开始执行地狱级瘦身..."
+
+             # --- 第一刀：砍掉 GDB 调试信息 (减重主力) ---
+             sed -i 's/CONFIG_FIRMWARE_INCLUDE_GDB=y/CONFIG_FIRMWARE_INCLUDE_GDB=n/g' $config_file
+
+             # --- 第二刀：砍掉科学上网全家桶 ---
              sed -i 's/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=y/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=n/g' $config_file
              sed -i 's/CONFIG_FIRMWARE_INCLUDE_V2RAY=y/CONFIG_FIRMWARE_INCLUDE_V2RAY=n/g' $config_file
              sed -i 's/CONFIG_FIRMWARE_INCLUDE_TROJAN=y/CONFIG_FIRMWARE_INCLUDE_TROJAN=n/g' $config_file
              sed -i 's/CONFIG_FIRMWARE_INCLUDE_XRAY=y/CONFIG_FIRMWARE_INCLUDE_XRAY=n/g' $config_file
+             sed -i 's/CONFIG_FIRMWARE_INCLUDE_SSOBFS=y/CONFIG_FIRMWARE_INCLUDE_SSOBFS=n/g' $config_file
              
-             # 关掉其他可能不需要的 (根据需要保留)
+             # --- 第三刀：砍掉不常用的功能 (根据需要保留) ---
+             # 关掉 OpenVPN (体积大，家用很少用)
              sed -i 's/CONFIG_FIRMWARE_INCLUDE_OPENVPN=y/CONFIG_FIRMWARE_INCLUDE_OPENVPN=n/g' $config_file
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_FBWIFI=y/CONFIG_FIRMWARE_INCLUDE_FBWIFI=n/g' $config_file
+             # 关掉 Zerotier (如果您不用内网穿透组网)
+             sed -i 's/CONFIG_FIRMWARE_INCLUDE_ZEROTIER=y/CONFIG_FIRMWARE_INCLUDE_ZEROTIER=n/g' $config_file
+             # 关掉 Wireguard
+             sed -i 's/CONFIG_FIRMWARE_INCLUDE_WIREGUARD=y/CONFIG_FIRMWARE_INCLUDE_WIREGUARD=n/g' $config_file
+             # 关掉 Samba 文件共享 (如果不插U盘挂硬盘，这个没用)
+             sed -i 's/CONFIG_FIRMWARE_INCLUDE_SAMBA36=y/CONFIG_FIRMWARE_INCLUDE_SAMBA36=n/g' $config_file
+             sed -i 's/CONFIG_FIRMWARE_INCLUDE_SMBD=y/CONFIG_FIRMWARE_INCLUDE_SMBD=n/g' $config_file
+             # 关掉 Aria2 下载
+             sed -i 's/CONFIG_FIRMWARE_INCLUDE_ARIA2=y/CONFIG_FIRMWARE_INCLUDE_ARIA2=n/g' $config_file
              
-             echo "瘦身完成！保留了 NAT 优化，去除了臃肿插件！"
+             echo "🎉 瘦身完成！只保留了核心路由功能和 NAT 优化！"
+          else
+             echo "❌ 严重警告：找不到配置文件！脚本可能失效！"
+             find . -name "*CR660x*" # 打印出来看看文件到底在哪
           fi
+          
+          # =======================================================
           # ⬆️⬆️⬆️ 减肥结束 ⬆️⬆️⬆️
+          # =======================================================
 
           for m in $targets; do fakeroot ./build_firmware_ci $m; \
           if [ $? = 0 ]; then cp -f images/*.trx ${images_dir}/$m.trx; else exit 1; fi; \
@@ -82,7 +105,7 @@ jobs:
       
       - name: Upload images to Artifact
         if: ${{ github.event_name != 'release' && success() }}
-        uses: actions/upload-artifact@v4  # ✅ 关键修复：升级到 v4，GitHub 不再拦截
+        uses: actions/upload-artifact@v4  # ✅ v4
         with:
           name: ${{ env.image_name }}
           path: ${{ env.images_dir }}/*.7z
