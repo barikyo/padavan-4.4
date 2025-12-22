@@ -47,43 +47,48 @@ jobs:
           mkdir -p ${images_dir}
           
           # =======================================================
-          # ⬇️⬇️⬇️ 乐奈的【终极】减肥大作战 (V3.0) ⬇️⬇️⬇️
+          # ⬇️⬇️⬇️ 乐奈的【必杀】减肥大作战 (最终版) ⬇️⬇️⬇️
           # =======================================================
           
-          # 1. 智能查找配置文件 (防止路径错误)
+          # 1. 找到 CR660x 的配置文件
           config_file=$(find configs -name "CR660x.config" | head -n 1)
           
           if [ -f "$config_file" ]; then
              echo "✅ 锁定目标: $config_file"
-             echo "🔥 开始执行地狱级瘦身..."
+             echo "🔥 正在注入【强制覆盖】指令..."
 
-             # --- 第一刀：砍掉 GDB 调试信息 (减重主力) ---
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_GDB=y/CONFIG_FIRMWARE_INCLUDE_GDB=n/g' $config_file
+             # 技巧：先尝试删除文件里可能存在的旧配置 (防止重复)
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS/d' $config_file
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_V2RAY/d' $config_file
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_TROJAN/d' $config_file
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_XRAY/d' $config_file
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_OPENVPN/d' $config_file
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_GDB/d' $config_file
+             
+             # 技巧：直接把禁用指令追加到文件末尾！(后发制人！)
+             # 这种写法绝对管用！
+             cat >> $config_file <<EOF
+          CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=n
+          CONFIG_FIRMWARE_INCLUDE_V2RAY=n
+          CONFIG_FIRMWARE_INCLUDE_TROJAN=n
+          CONFIG_FIRMWARE_INCLUDE_XRAY=n
+          CONFIG_FIRMWARE_INCLUDE_SSOBFS=n
+          CONFIG_FIRMWARE_INCLUDE_OPENVPN=n
+          CONFIG_FIRMWARE_INCLUDE_ZEROTIER=n
+          CONFIG_FIRMWARE_INCLUDE_WIREGUARD=n
+          CONFIG_FIRMWARE_INCLUDE_SAMBA36=n
+          CONFIG_FIRMWARE_INCLUDE_SMBD=n
+          CONFIG_FIRMWARE_INCLUDE_ARIA2=n
+          CONFIG_FIRMWARE_INCLUDE_GDB=n
+          EOF
 
-             # --- 第二刀：砍掉科学上网全家桶 ---
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=y/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=n/g' $config_file
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_V2RAY=y/CONFIG_FIRMWARE_INCLUDE_V2RAY=n/g' $config_file
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_TROJAN=y/CONFIG_FIRMWARE_INCLUDE_TROJAN=n/g' $config_file
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_XRAY=y/CONFIG_FIRMWARE_INCLUDE_XRAY=n/g' $config_file
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_SSOBFS=y/CONFIG_FIRMWARE_INCLUDE_SSOBFS=n/g' $config_file
+             echo "🎉 注入完成！配置已强制覆盖！"
              
-             # --- 第三刀：砍掉不常用的功能 (根据需要保留) ---
-             # 关掉 OpenVPN (体积大，家用很少用)
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_OPENVPN=y/CONFIG_FIRMWARE_INCLUDE_OPENVPN=n/g' $config_file
-             # 关掉 Zerotier (如果您不用内网穿透组网)
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_ZEROTIER=y/CONFIG_FIRMWARE_INCLUDE_ZEROTIER=n/g' $config_file
-             # 关掉 Wireguard
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_WIREGUARD=y/CONFIG_FIRMWARE_INCLUDE_WIREGUARD=n/g' $config_file
-             # 关掉 Samba 文件共享 (如果不插U盘挂硬盘，这个没用)
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_SAMBA36=y/CONFIG_FIRMWARE_INCLUDE_SAMBA36=n/g' $config_file
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_SMBD=y/CONFIG_FIRMWARE_INCLUDE_SMBD=n/g' $config_file
-             # 关掉 Aria2 下载
-             sed -i 's/CONFIG_FIRMWARE_INCLUDE_ARIA2=y/CONFIG_FIRMWARE_INCLUDE_ARIA2=n/g' $config_file
-             
-             echo "🎉 瘦身完成！只保留了核心路由功能和 NAT 优化！"
+             # (可选) 打印最后20行看看有没有写进去
+             tail -n 20 $config_file
           else
-             echo "❌ 严重警告：找不到配置文件！脚本可能失效！"
-             find . -name "*CR660x*" # 打印出来看看文件到底在哪
+             echo "❌ 找不到配置文件！"
+             exit 1
           fi
           
           # =======================================================
