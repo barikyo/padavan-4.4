@@ -47,7 +47,7 @@ jobs:
           mkdir -p ${images_dir}
           
           # =======================================================
-          # ⬇️⬇️⬇️ 乐奈的【必杀】减肥大作战 (最终版) ⬇️⬇️⬇️
+          # ⬇️⬇️⬇️ 乐奈的【精准定制版】减肥 + 增肌 (Curl) ⬇️⬇️⬇️
           # =======================================================
           
           # 1. 找到 CR660x 的配置文件
@@ -55,19 +55,46 @@ jobs:
           
           if [ -f "$config_file" ]; then
              echo "✅ 锁定目标: $config_file"
-             echo "🔥 正在注入【强制覆盖】指令..."
+             echo "🔥 正在执行：清理臃肿插件 + 注入 Curl ..."
 
-             # 技巧：先尝试删除文件里可能存在的旧配置 (防止重复)
+             # --- 第一步：清理旧配置 (防止重复) ---
+             # 把这些可能存在的行都删掉，给我们的新配置腾位置
              sed -i '/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS/d' $config_file
              sed -i '/CONFIG_FIRMWARE_INCLUDE_V2RAY/d' $config_file
              sed -i '/CONFIG_FIRMWARE_INCLUDE_TROJAN/d' $config_file
              sed -i '/CONFIG_FIRMWARE_INCLUDE_XRAY/d' $config_file
              sed -i '/CONFIG_FIRMWARE_INCLUDE_OPENVPN/d' $config_file
              sed -i '/CONFIG_FIRMWARE_INCLUDE_GDB/d' $config_file
+
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_MENTOHUST/d' .config #删除配置项MENTOHUST
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_SERVER/d' .config #删除配置项SOFTETHERVPN
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CLIENT/d' .config #删除配置项SOFTETHERVPN
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CMD/d' .config #删除配置项SOFTETHERVPN
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT/d' .config #删除配置项SCUTCLIENT
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS/d' .config #删除配置项SS plus+
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SSSERVER/d' .config #删除配置项SS server
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER/d' .config #删除配置项DNSFORWARDER
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_ADBYBY/d' .config #删除配置项adbyby plus+
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_FRPC/d' .config #删除配置项adbyby plus+
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_FRPS/d' .config #删除配置项adbyby plus+
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_TUNSAFE/d' .config #删除配置项adbyby plus+
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_ALIDDNS/d' .config #删除配置项阿里DDNS
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SMARTDNS/d' .config
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SRELAY/d' .config
              
-             # 技巧：直接把禁用指令追加到文件末尾！(后发制人！)
-             # 这种写法绝对管用！
+             # 同时也删掉原来的 curl/dropbear 配置，确保我们后面写的生效
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_CURL/d' $config_file
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_DROPBEAR/d' $config_file
+             
+             # --- 第二步：写入新配置 (追加到文件末尾) ---
              cat >> $config_file <<EOF
+          # 1. 核心功能区 (您点名要的！=y)
+          CONFIG_FIRMWARE_INCLUDE_CURL=y
+          CONFIG_FIRMWARE_INCLUDE_DROPBEAR=y
+
+          # 2. 垃圾清理区 (全部关掉！=n)
+
+          
           CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=n
           CONFIG_FIRMWARE_INCLUDE_V2RAY=n
           CONFIG_FIRMWARE_INCLUDE_TROJAN=n
@@ -79,20 +106,55 @@ jobs:
           CONFIG_FIRMWARE_INCLUDE_SAMBA36=n
           CONFIG_FIRMWARE_INCLUDE_SMBD=n
           CONFIG_FIRMWARE_INCLUDE_ARIA2=n
+          CONFIG_FIRMWARE_INCLUDE_V2RAY=n
+          CONFIG_FIRMWARE_INCLUDE_TROJAN=n
+          CONFIG_FIRMWARE_INCLUDE_XRAY=n
+          CONFIG_FIRMWARE_INCLUDE_SSOBFS=n
+          CONFIG_FIRMWARE_INCLUDE_ADBYBY=n
+          CONFIG_FIRMWARE_INCLUDE_ADGUARDHOME=n
+          CONFIG_FIRMWARE_INCLUDE_KOOLPROXY=n
+          CONFIG_FIRMWARE_INCLUDE_SMARTDNS=n
+          CONFIG_FIRMWARE_INCLUDE_SMARTDNSBIN=n
+          CONFIG_FIRMWARE_INCLUDE_ALIDDNS=n
+          CONFIG_FIRMWARE_INCLUDE_ZEROTIER=n
+          CONFIG_FIRMWARE_INCLUDE_WIREGUARD=n
+          CONFIG_FIRMWARE_INCLUDE_OPENVPN=n
+          CONFIG_FIRMWARE_INCLUDE_FRPC=n
+          CONFIG_FIRMWARE_INCLUDE_FRPS=n
+          CONFIG_FIRMWARE_INCLUDE_CADDY=n
+          CONFIG_FIRMWARE_INCLUDE_WYY=n
+          CONFIG_FIRMWARE_INCLUDE_MENTOHUST=n
+          CONFIG_FIRMWARE_INCLUDE_MENTOHUST=n
+          CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_SERVER=n
+          CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CLIENT=n
+          CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CMD=n
+          CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT=n
+          CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=n
+          CONFIG_FIRMWARE_INCLUDE_SSSERVER=n
+          CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER=n
+          CONFIG_FIRMWARE_INCLUDE_ADBYBY=n
+          CONFIG_FIRMWARE_INCLUDE_FRPC=n 
+          CONFIG_FIRMWARE_INCLUDE_FRPS=n
+          CONFIG_FIRMWARE_INCLUDE_TUNSAFE=n
+          CONFIG_FIRMWARE_INCLUDE_ALIDDNS=n
+          CONFIG_FIRMWARE_INCLUDE_SMARTDNS=n
+          CONFIG_FIRMWARE_INCLUDE_SRELAY=n
+          
+          # 3. 关键减肥药 (去调试信息)
           CONFIG_FIRMWARE_INCLUDE_GDB=n
           EOF
 
-             echo "🎉 注入完成！配置已强制覆盖！"
+             echo "🎉 配置修改完成！已开启 Curl，关闭臃肿插件！"
              
-             # (可选) 打印最后20行看看有没有写进去
-             tail -n 20 $config_file
+             # (可选) 打印最后25行确认一下
+             tail -n 25 $config_file
           else
              echo "❌ 找不到配置文件！"
              exit 1
           fi
           
           # =======================================================
-          # ⬆️⬆️⬆️ 减肥结束 ⬆️⬆️⬆️
+          # ⬆️⬆️⬆️ 定制结束 ⬆️⬆️⬆️
           # =======================================================
 
           for m in $targets; do fakeroot ./build_firmware_ci $m; \
