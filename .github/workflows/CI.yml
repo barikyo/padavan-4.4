@@ -66,21 +66,21 @@ jobs:
              sed -i '/CONFIG_FIRMWARE_INCLUDE_OPENVPN/d' $config_file
              sed -i '/CONFIG_FIRMWARE_INCLUDE_GDB/d' $config_file
 
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_MENTOHUST/d' .config #删除配置项MENTOHUST
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_SERVER/d' .config #删除配置项SOFTETHERVPN
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CLIENT/d' .config #删除配置项SOFTETHERVPN
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CMD/d' .config #删除配置项SOFTETHERVPN
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT/d' .config #删除配置项SCUTCLIENT
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS/d' .config #删除配置项SS plus+
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_SSSERVER/d' .config #删除配置项SS server
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER/d' .config #删除配置项DNSFORWARDER
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_ADBYBY/d' .config #删除配置项adbyby plus+
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_FRPC/d' .config #删除配置项adbyby plus+
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_FRPS/d' .config #删除配置项adbyby plus+
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_TUNSAFE/d' .config #删除配置项adbyby plus+
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_ALIDDNS/d' .config #删除配置项阿里DDNS
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_SMARTDNS/d' .config
-             sed -i '/CONFIG_FIRMWARE_INCLUDE_SRELAY/d' .config
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_MENTOHUST/d' $config_file #删除配置项MENTOHUST
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_SERVER/d' $config_file #删除配置项SOFTETHERVPN
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CLIENT/d' $config_file #删除配置项SOFTETHERVPN
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CMD/d' $config_file #删除配置项SOFTETHERVPN
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT/d' $config_file #删除配置项SCUTCLIENT
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS/d' $config_file #删除配置项SS plus+
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SSSERVER/d' $config_file #删除配置项SS server
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER/d' $config_file #删除配置项DNSFORWARDER
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_ADBYBY/d' $config_file #删除配置项adbyby plus+
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_FRPC/d' $config_file #删除配置项adbyby plus+
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_FRPS/d' $config_file #删除配置项adbyby plus+
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_TUNSAFE/d' $config_file #删除配置项adbyby plus+
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_ALIDDNS/d' $config_file #删除配置项阿里DDNS
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SMARTDNS/d' $config_file
+             sed -i '/CONFIG_FIRMWARE_INCLUDE_SRELAY/d' $config_file
              
              # 同时也删掉原来的 curl/dropbear 配置，确保我们后面写的生效
              sed -i '/CONFIG_FIRMWARE_INCLUDE_CURL/d' $config_file
