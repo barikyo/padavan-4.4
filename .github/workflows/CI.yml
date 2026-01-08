@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     name: build
-    runs-on: ubuntu-22.04  # ✅ 环境稳定
+    runs-on: ubuntu-22.04
     if: ${{ !(github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) }}
     env:
       build_variant: ${{ matrix.build_variant }}
@@ -23,14 +23,13 @@ jobs:
       matrix:
         include:
           - build_variant: "mt7621"
-            targets: "CR660x"  # ✅ 只编译 CR660x
+            targets: "CR660x"
     steps:
-      - uses: actions/checkout@v4  # ✅ v4
+      - uses: actions/checkout@v4
       
       - name: Prepare environment
         run: |
           sudo apt update
-          # ✅ 补全依赖
           sudo apt install libtool-bin gperf python3-docutils autopoint gettext libltdl-dev
       
       - name: Run shellcheck
@@ -45,7 +44,6 @@ jobs:
         run: |
           cd trunk
           mkdir -p ${images_dir}
-
           for m in $targets; do fakeroot ./build_firmware_ci $m; \
           if [ $? = 0 ]; then cp -f images/*.trx ${images_dir}/$m.trx; else exit 1; fi; \
           ./clear_tree_simple >/dev/null 2>&1; done
