@@ -2,7 +2,7 @@
 
 This project is based on original rt-n56u with latest mtk 4.4.198 kernel, which is fetch from D-LINK GPL code.
 
-- 针对Cr660x，本仓库修改：删除冗余插件，优化路由器空间。纯净使用你的Cr660x路由器，为地球节约能源。
+- **For the Cr660x, this repository has been modified to remove redundant plugins and optimize router space. Use your Cr660x router cleanly and save energy for the planet.**
 
 - Features
   - Based on 4.4.198 Linux kernel
