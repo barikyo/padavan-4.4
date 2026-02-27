@@ -4,6 +4,8 @@ This project is based on original rt-n56u with latest mtk 4.4.198 kernel, which 
 
 - **For the Cr660x, this repository has been modified to remove redundant plugins and optimize router space. Use your Cr660x router cleanly and save energy for the planet.**
 
+[![CI](https://github.com/barikyo/padavan-4.4-simplified-cr660x/actions/workflows/CI.yml/badge.svg)](https://github.com/barikyo/padavan-4.4-simplified-cr660x/actions/workflows/CI.yml)
+
 - Features
   - Based on 4.4.198 Linux kernel
   - Support MT7621 based devices
