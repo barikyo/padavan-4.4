@@ -3,6 +3,7 @@
 This project is based on original rt-n56u with latest mtk 4.4.198 kernel, which is fetch from D-LINK GPL code.
 
 - **For the Cr660x, this repository has been modified to remove redundant plugins and optimize router space. Use your Cr660x router cleanly and save energy for the planet.**
+- Fixed an issue where curl was unable to access HTTPS websites due to an inability to access SSL root certificates.
 
 [![CI](https://github.com/barikyo/padavan-4.4-simplified-cr660x/actions/workflows/CI.yml/badge.svg)](https://github.com/barikyo/padavan-4.4-simplified-cr660x/actions/workflows/CI.yml)
 
